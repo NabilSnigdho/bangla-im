@@ -90,6 +90,8 @@ export class Converter {
 				output += getReplacement(pattern, input, prefix)
 				prefix = pattern[0].at(-1) ?? " "
 				input = input.substring(pattern[0].length)
+			} else if (input[0] !== input[0].toLowerCase()) {
+				input = input[0].toLowerCase() + input.substring(1)
 			} else {
 				prefix = input[0]
 				output += prefix
