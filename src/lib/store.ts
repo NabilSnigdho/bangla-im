@@ -11,4 +11,4 @@ export const textAtom = atomWithStorage("text", "")
 
 export const rtAtom = atomWithStorage<string>("rt", "")
 export const converterAtom = atom((get) => new Converter(get(rtAtom)))
-export const showSuggestionsAtom = atom(false)
+export const bufferAtom = atom("")

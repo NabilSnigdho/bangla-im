@@ -54,7 +54,7 @@ export function useEngine() {
 			} else {
 				if (
 					this.start === null ||
-					end <= this.start ||
+					end < this.start ||
 					(this.end !== null &&
 						end - this.end !== toInsert.length - toRemove.length)
 				) {
