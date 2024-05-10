@@ -1,19 +1,20 @@
-import { bufferAtom } from "@/lib/store"
+import { showSuggestionsAtom } from "@/lib/store"
 import type { useEngine } from "@/lib/use-engine"
 import { autoUpdate, useFloating } from "@floating-ui/react-dom"
 import { Root as Portal } from "@radix-ui/react-portal"
 import { useAtomValue } from "jotai"
+import { memo } from "react"
 
-export function Suggestion({
+export const Suggestions = memo(function Suggestions({
 	engine,
 	text,
 }: { engine: ReturnType<typeof useEngine>; text: string }) {
-	const buffer = useAtomValue(bufferAtom)
+	const show = useAtomValue(showSuggestionsAtom)
 	const { refs, floatingStyles } = useFloating({
 		whileElementsMounted: autoUpdate,
 	})
 
-	if (engine.start === null || engine.end === null) return null
+	if (!show || engine.start === null || engine.end === null) return null
 	return (
 		<div className="-z-10 invisible absolute whitespace-pre-wrap">
 			{text.slice(0, engine.start)}
@@ -25,11 +26,11 @@ export function Suggestion({
 						style={floatingStyles}
 						className="rounded-sm border bg-secondary p-2 shadow-lg"
 					>
-						{buffer}
+						{engine.buffer}
 					</div>
 				</Portal>
 			</span>
 			{text.slice(engine.end)}
 		</div>
 	)
-}
+})

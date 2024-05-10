@@ -1,12 +1,12 @@
-import { bufferAtom, textAtom } from "@/lib/store"
+import { showSuggestionsAtom, textAtom } from "@/lib/store"
 import { useEngine } from "@/lib/use-engine"
 import { useAtom, useSetAtom } from "jotai"
-import { Suggestion } from "./suggestion"
+import { Suggestions } from "./suggestions"
 
 export function Editor() {
 	const [text, setText] = useAtom(textAtom)
 	const engine = useEngine()
-	const setBuffer = useSetAtom(bufferAtom)
+	const setShowSuggestions = useSetAtom(showSuggestionsAtom)
 
 	return (
 		<label className="flex-auto overflow-y-auto p-4">
@@ -22,10 +22,17 @@ export function Editor() {
 					}}
 					onChange={(event) => {
 						setText(engine.onChange(event.currentTarget))
-						setBuffer(engine.buffer)
+						setShowSuggestions(true)
+					}}
+					onKeyDown={(event) => {
+						switch (event.key) {
+							case "Escape":
+								setShowSuggestions(false)
+								break
+						}
 					}}
 				/>
-				<Suggestion engine={engine} text={text} />
+				<Suggestions engine={engine} text={text} />
 			</div>
 		</label>
 	)
