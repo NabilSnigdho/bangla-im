@@ -100,6 +100,46 @@ export class Converter {
 		}
 		return output
 	}
+	getJSON() {
+		return JSON.stringify(
+			this.patterns
+				.valuesArray()
+				.toReversed()
+				.map((pattern) => {
+					const rules = pattern.rules.map((rule) => ({
+						replace: rule.replacement,
+						matches: rule.conditions.map((condition) => {
+							const { is } = condition
+							const value = typeof is === "string" ? is : undefined
+
+							return {
+								type: condition.target === Target.Prefix ? "prefix" : "suffix",
+								scope: `${condition.not !== (is === Is.Alphabet) ? "!" : ""}${
+									value
+										? "exact"
+										: is === Is.Alphabet
+											? "punctuation"
+											: is === Is.Vowel
+												? "vowel"
+												: is === Is.Consonant
+													? "consonant"
+													: "digit"
+								}`,
+								value,
+							}
+						}),
+					}))
+
+					return {
+						find: pattern.match,
+						replace: pattern.defaultReplacement,
+						rules: rules.length ? rules : undefined,
+					}
+				}),
+			null,
+			2,
+		)
+	}
 }
 
 const alpha = /^[a-z]$/i
