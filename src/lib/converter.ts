@@ -42,13 +42,17 @@ export class Converter {
 			parse(csv)
 				.filter(([match, patternStr]) => !!match && patternStr !== undefined)
 				.map(([match, patternStr]: [string, string]) => {
-					const [defaultReplacement, ...rules] = patternStr.split(";")
+					const [defaultReplacement, ...rules] = patternStr
+						.split(/(?<!\\);/)
+						.map((x) => x.replaceAll("\\;", ";"))
 					const pattern = {
 						match,
 						defaultReplacement,
 						rules: rules
 							.map((rule) => {
-								const [replacement, conditions] = rule.split(":", 2)
+								const [replacement, conditions] = rule
+									.split(/(?<!\\):/, 2)
+									.map((x) => x.replaceAll("\\:", ":"))
 
 								if (!conditions) return null
 
