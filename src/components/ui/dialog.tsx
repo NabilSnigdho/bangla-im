@@ -27,10 +27,19 @@ const DialogOverlay = React.forwardRef<
 ))
 DialogOverlay.displayName = DialogPrimitive.Overlay.displayName
 
+const DialogXButton = () => (
+	<DialogPrimitive.Close className="absolute top-4 right-4 rounded-sm opacity-70 ring-offset-background transition-opacity disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2">
+		<X className="h-4 w-4" />
+		<span className="sr-only">Close</span>
+	</DialogPrimitive.Close>
+)
+
 const DialogContent = React.forwardRef<
 	React.ElementRef<typeof DialogPrimitive.Content>,
-	React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
->(({ className, children, ...props }, ref) => (
+	React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & {
+		noXButton?: boolean
+	}
+>(({ className, children, noXButton, ...props }, ref) => (
 	<DialogPortal>
 		<DialogOverlay />
 		<DialogPrimitive.Content
@@ -42,10 +51,7 @@ const DialogContent = React.forwardRef<
 			{...props}
 		>
 			{children}
-			<DialogPrimitive.Close className="absolute top-4 right-4 rounded-sm opacity-70 ring-offset-background transition-opacity disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2">
-				<X className="h-4 w-4" />
-				<span className="sr-only">Close</span>
-			</DialogPrimitive.Close>
+			{!noXButton && <DialogXButton />}
 		</DialogPrimitive.Content>
 	</DialogPortal>
 ))
@@ -112,6 +118,7 @@ export {
 	DialogOverlay,
 	DialogClose,
 	DialogTrigger,
+	DialogXButton,
 	DialogContent,
 	DialogHeader,
 	DialogFooter,

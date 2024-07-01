@@ -82,6 +82,7 @@ export class Converter {
 				}),
 		)
 	}
+
 	convert(rawInput: string) {
 		let prefix = " "
 		let input = rawInput
@@ -104,6 +105,7 @@ export class Converter {
 		}
 		return output
 	}
+
 	getJSON() {
 		return JSON.stringify(
 			this.patterns
@@ -127,7 +129,7 @@ export class Converter {
 												? "vowel"
 												: is === Is.Consonant
 													? "consonant"
-													: "digit"
+													: "number"
 								}`,
 								value,
 							}
@@ -143,6 +145,31 @@ export class Converter {
 			null,
 			2,
 		)
+	}
+
+	getOBKPhoneticLayout(layout: {
+		developer: {
+			comment: string
+			name: string
+		}
+		image0: string
+		name: string
+		version: string
+	}) {
+		return {
+			info: {
+				layout,
+				type: "phonetic",
+				version: "2",
+			},
+			layout: {
+				casesensitive: "oiudgjnrstyz",
+				consonant: "bcdfghjklmnpqrstvwxyz",
+				number: "1234567890",
+				patterns: this.getJSON(),
+				vowel: "aeiou",
+			},
+		}
 	}
 }
 

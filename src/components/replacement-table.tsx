@@ -10,9 +10,10 @@ import {
 	DialogTrigger,
 } from "@/components/ui/dialog"
 import { example } from "@/lib/example"
-import { converterAtom, rtAtom } from "@/lib/store"
-import { getDefaultStore, useAtom } from "jotai"
+import { rtAtom } from "@/lib/store"
+import { useAtom } from "jotai"
 import { Rows3, TableProperties } from "lucide-react"
+import { OBKLayout } from "./obk-layout"
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -82,22 +83,7 @@ export function ReplacementTable() {
 							</DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>
-					<Button
-						type="button"
-						onClick={() => {
-							const converter = getDefaultStore().get(converterAtom)
-							const element = document.createElement("a")
-							const file = new Blob([converter.getJSON()], {
-								type: "text/plain",
-							})
-							element.href = URL.createObjectURL(file)
-							element.download = "Layout.json"
-							document.body.appendChild(element) // Required for this to work in FireFox
-							element.click()
-						}}
-					>
-						Download JSON
-					</Button>
+					<OBKLayout />
 					<DialogClose asChild>
 						<Button type="button">OK</Button>
 					</DialogClose>
