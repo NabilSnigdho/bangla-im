@@ -82,6 +82,7 @@ export class Converter {
 				}),
 		)
 	}
+
 	convert(rawInput: string) {
 		let prefix = " "
 		let input = rawInput
@@ -104,45 +105,69 @@ export class Converter {
 		}
 		return output
 	}
-	getJSON() {
-		return JSON.stringify(
-			this.patterns
-				.valuesArray()
-				.toReversed()
-				.map((pattern) => {
-					const rules = pattern.rules.map((rule) => ({
-						replace: rule.replacement,
-						matches: rule.conditions.map((condition) => {
-							const { is } = condition
-							const value = typeof is === "string" ? is : undefined
 
-							return {
-								type: condition.target === Target.Prefix ? "prefix" : "suffix",
-								scope: `${condition.not !== (is === Is.Alphabet) ? "!" : ""}${
-									value
-										? "exact"
-										: is === Is.Alphabet
-											? "punctuation"
-											: is === Is.Vowel
-												? "vowel"
-												: is === Is.Consonant
-													? "consonant"
-													: "digit"
-								}`,
-								value,
-							}
-						}),
-					}))
+	getPatterns() {
+		return this.patterns
+			.valuesArray()
+			.toReversed()
+			.map((pattern) => {
+				const rules = pattern.rules.map((rule) => ({
+					replace: rule.replacement,
+					matches: rule.conditions.map((condition) => {
+						const { is } = condition
+						const value = typeof is === "string" ? is : undefined
 
-					return {
-						find: pattern.match,
-						replace: pattern.defaultReplacement,
-						rules: rules.length ? rules : undefined,
-					}
-				}),
-			null,
-			2,
-		)
+						return {
+							type: condition.target === Target.Prefix ? "prefix" : "suffix",
+							scope: `${condition.not !== (is === Is.Alphabet) ? "!" : ""}${
+								value
+									? "exact"
+									: is === Is.Alphabet
+										? "punctuation"
+										: is === Is.Vowel
+											? "vowel"
+											: is === Is.Consonant
+												? "consonant"
+												: "number"
+							}`,
+							value,
+						}
+					}),
+				}))
+
+				return {
+					find: pattern.match,
+					replace: pattern.defaultReplacement,
+					rules,
+				}
+			})
+	}
+
+	getOBKPhoneticLayout(layout: {
+		developer: {
+			comment: string
+			name: string
+		}
+		image0: string
+		name: string
+		version: string
+	}) {
+		return {
+			info: {
+				layout,
+				type: "phonetic",
+				version: "2",
+			},
+			layout: {
+				casesensitive: "",
+				consonant: "bcdfghjklmnpqrstvwxyz",
+				number: "1234567890",
+				patterns: this.getPatterns().toSorted(
+					(a, b) => b.find.length - a.find.length || (a.find > b.find ? 1 : -1),
+				),
+				vowel: "aeiou",
+			},
+		}
 	}
 }
 
