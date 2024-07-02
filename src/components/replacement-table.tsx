@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dialog"
 import { example } from "@/lib/example"
 import { rtAtom } from "@/lib/store"
+import { sentenceCase } from "change-case"
 import { useAtom } from "jotai"
 import { Rows3, TableProperties } from "lucide-react"
 import { Suspense, lazy } from "react"
@@ -62,25 +63,12 @@ export function ReplacementTable() {
 							</Button>
 						</DropdownMenuTrigger>
 						<DropdownMenuContent>
-							<DropdownMenuItem
-								onClick={async () => {
-									example("avro")
-								}}
-							>
-								Avro
-							</DropdownMenuItem>
-							<DropdownMenuItem
-								onClick={async () => {
-									example("borno")
-								}}
-							>
-								Borno
-							</DropdownMenuItem>
-							<DropdownMenuItem
-								onClick={async () => {
-									example("probhat")
-								}}
-							>
+							{(["avro", "borno", "khipro"] as const).map((x) => (
+								<DropdownMenuItem key={x} onClick={async () => example(x)}>
+									{sentenceCase(x)}
+								</DropdownMenuItem>
+							))}
+							<DropdownMenuItem onClick={async () => example("probhat")}>
 								Probhat (no AltGr)
 							</DropdownMenuItem>
 						</DropdownMenuContent>
