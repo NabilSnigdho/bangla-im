@@ -1,6 +1,6 @@
 import { fetchLayout } from "@/lib/fetchLayout"
-import { layoutAtom, layoutNameAtom, rtAtom } from "@/lib/store"
-import { getDefaultStore, useAtom, useSetAtom } from "jotai"
+import { layoutAtom, layoutNameAtom } from "@/lib/store"
+import { useAtom } from "jotai"
 import { Keyboard } from "lucide-react"
 import { useEffect } from "react"
 import { Button } from "./ui/button"
@@ -15,11 +15,11 @@ const builtInLayouts = {
 	avro: "অভ্র",
 	borno: "বর্ণ",
 	khipro: "ক্ষিপ্র",
+	"ridmik-easy": "রিদমিক সহজ ফোনেটিক",
 	probhat: "প্রভাত (ALT ছাড়া)",
 } as const
 
 export function Layouts() {
-	const setRT = useSetAtom(rtAtom)
 	const [layout, setLayout] = useAtom(layoutAtom)
 	const [layoutName, setLayoutName] = useAtom(layoutNameAtom)
 
