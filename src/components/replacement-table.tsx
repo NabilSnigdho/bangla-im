@@ -9,18 +9,10 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog"
-import { example } from "@/lib/example"
 import { rtAtom } from "@/lib/store"
-import { sentenceCase } from "change-case"
 import { useAtom } from "jotai"
-import { Rows3, TableProperties } from "lucide-react"
+import { TableProperties } from "lucide-react"
 import { Suspense, lazy } from "react"
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuTrigger,
-} from "./ui/dropdown-menu"
 
 const OBKLayout = lazy(() => import("./obk-layout"))
 
@@ -56,23 +48,6 @@ export function ReplacementTable() {
 					/>
 				</div>
 				<DialogFooter>
-					<DropdownMenu>
-						<DropdownMenuTrigger asChild>
-							<Button variant="outline" className="mr-auto">
-								<Rows3 size="1.2rem" className="mr-2" /> Examples
-							</Button>
-						</DropdownMenuTrigger>
-						<DropdownMenuContent>
-							{(["avro", "borno", "khipro"] as const).map((x) => (
-								<DropdownMenuItem key={x} onClick={async () => example(x)}>
-									{sentenceCase(x)}
-								</DropdownMenuItem>
-							))}
-							<DropdownMenuItem onClick={async () => example("probhat")}>
-								Probhat (no AltGr)
-							</DropdownMenuItem>
-						</DropdownMenuContent>
-					</DropdownMenu>
 					<Suspense>
 						<OBKLayout />
 					</Suspense>
