@@ -42,8 +42,8 @@ export class Converter {
 			parse(csv)
 				.filter(([match, patternStr]) => !!match && patternStr !== undefined)
 				.map(([match, patternStr]: [string, string]) => {
-					// patternStr = patternStr.replaceAll('ZWNJ', '\u200C');
-					// patternStr = patternStr.replaceAll('ZWJ', '\u200D');
+					patternStr = patternStr.replaceAll("ZWNJ", "\u200C")
+					patternStr = patternStr.replaceAll("ZWJ", "\u200D")
 					const [defaultReplacement, ...rules] = patternStr
 						.split(/(?<!\\);/)
 						.map((x) => x.replaceAll("\\;", ";"))
