@@ -68,7 +68,8 @@ export function useEngine() {
 
 			if (/[ \n]$/.test(this.buffer)) this.newSession(null)
 			else if (this.start !== null) {
-				const transformed = converterRef.current.convert(this.buffer)
+				const transformed =
+					converterRef.current.convert(this.buffer) || this.buffer
 				text = text.slice(0, this.start) + transformed + text.slice(end)
 
 				this.end = this.start + transformed.length
