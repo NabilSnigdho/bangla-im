@@ -48,6 +48,7 @@ export function useEngine() {
 			const oldText = getDefaultStore().get(textAtom)
 			const [toRemove, toInsert] = this.getDiff(oldText, text)
 			const end = el.selectionStart
+			console.log(toInsert, toRemove)
 
 			if (toRemove && toInsert) {
 				this.newSession(end - toInsert.length, toInsert)
