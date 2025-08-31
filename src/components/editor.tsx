@@ -28,23 +28,28 @@ export function Editor() {
 								break
 							case "Up":
 							case "ArrowUp":
-								event.preventDefault()
-								engine.onSuggestionMove(-1)
+								if (engine.buffer) {
+									event.preventDefault()
+									engine.onSuggestionMove(-1)
+								}
 								break
 							case "Down":
 							case "ArrowDown":
-								event.preventDefault()
-								engine.onSuggestionMove(+1)
-								break
-							case "Enter": {
-								const suggestion =
-									engine.suggestionsRef.current[selectedSuggestion]
-								if (suggestion) {
+								if (engine.buffer) {
 									event.preventDefault()
-									engine.onSuggestionClick(suggestion)
+									engine.onSuggestionMove(+1)
 								}
 								break
-							}
+							case "Enter":
+								if (engine.buffer) {
+									const suggestion =
+										engine.suggestionsRef.current[selectedSuggestion]
+									if (suggestion) {
+										event.preventDefault()
+										engine.onSuggestionClick(suggestion)
+									}
+								}
+								break
 						}
 					}}
 				/>
