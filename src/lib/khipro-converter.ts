@@ -773,6 +773,5 @@ export function convert(text: string): string {
 		state = _apply_transition(state, group)
 	}
 
-	console.log(text, out.join(""))
 	return out.join("")
 }

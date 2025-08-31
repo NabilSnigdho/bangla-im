@@ -1,8 +1,8 @@
-import { fetchLayout } from "@/lib/fetchLayout"
-import { layoutAtom, layoutNameAtom } from "@/lib/store"
 import { useAtom } from "jotai"
 import { Keyboard } from "lucide-react"
 import { useEffect } from "react"
+import { fetchLayout } from "@/lib/fetchLayout"
+import { layoutAtom, layoutNameAtom } from "@/lib/store"
 import { Button } from "./ui/button"
 import {
 	DropdownMenu,
