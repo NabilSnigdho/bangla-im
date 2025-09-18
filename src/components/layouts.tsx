@@ -1,5 +1,5 @@
 import { useAtom } from "jotai"
-import { Keyboard } from "lucide-react"
+import { HelpCircleIcon, Keyboard } from "lucide-react"
 import { useEffect } from "react"
 import { fetchLayout } from "@/lib/fetchLayout"
 import { layoutAtom, layoutNameAtom } from "@/lib/store"
@@ -12,11 +12,27 @@ import {
 } from "./ui/dropdown-menu"
 
 const builtInLayouts = {
-	avro: "অভ্র",
-	borno: "বর্ণ",
-	khipro: "ক্ষিপ্র",
-	"ridmik-easy": "রিদমিক সহজ ফোনেটিক",
-	probhat: "প্রভাত (ALT ছাড়া)",
+	avro: {
+		name: "অভ্র",
+		documentation:
+			"https://www.omicronlab.com/download/pdf/Bangla%20Typing%20with%20Avro%20Phonetic.pdf",
+	},
+	borno: {
+		name: "বর্ণ (১৯৯৬-৯৮)",
+		documentation: "/borno.png",
+	},
+	khipro: {
+		name: "ক্ষিপ্র",
+		documentation: "https://khiprokeyboard.github.io/docs/",
+	},
+	"ridmik-easy": {
+		name: "সহজ ফোনেটিক (রিদ্মিক)",
+		documentation: "https://easy.ridmik.com/",
+	},
+	probhat: {
+		name: "প্রভাত (Alt Gr ছাড়া)",
+		documentation: "/provat.png",
+	},
 } as const
 
 export function Layouts() {
@@ -25,34 +41,47 @@ export function Layouts() {
 
 	useEffect(() => {
 		if (layout in builtInLayouts) {
-			setLayoutName(builtInLayouts[layout as keyof typeof builtInLayouts])
+			setLayoutName(builtInLayouts[layout as keyof typeof builtInLayouts].name)
 			fetchLayout(layout)
 		} else {
 			setLayout("khipro")
 		}
 	}, [layout, setLayout, setLayoutName])
 
+	const doc =
+		builtInLayouts[layout as keyof typeof builtInLayouts]?.documentation
+
 	return (
-		<DropdownMenu>
-			<DropdownMenuTrigger asChild>
-				<Button variant="outline" className="mr-auto">
-					<Keyboard size="1.2rem" className="mr-2" /> {layoutName}
+		<>
+			<DropdownMenu>
+				<DropdownMenuTrigger asChild>
+					<Button variant="outline">
+						<Keyboard size="1.2rem" className="mr-2" /> {layoutName}
+					</Button>
+				</DropdownMenuTrigger>
+				<DropdownMenuContent>
+					{Object.entries(builtInLayouts).map(([key, { name }]) => (
+						<DropdownMenuItem
+							key={key}
+							onClick={async () => {
+								setLayout(key)
+								setLayoutName(name)
+								await fetchLayout(key)
+							}}
+						>
+							{name}
+						</DropdownMenuItem>
+					))}
+				</DropdownMenuContent>
+			</DropdownMenu>
+			{doc && (
+				<Button variant="outline" asChild>
+					<a href={doc} target="_blank" rel="noopener noreferrer">
+						<HelpCircleIcon size="1.2rem" className="mr-2" />
+						Help
+					</a>
 				</Button>
-			</DropdownMenuTrigger>
-			<DropdownMenuContent>
-				{Object.entries(builtInLayouts).map(([key, name]) => (
-					<DropdownMenuItem
-						key={key}
-						onClick={async () => {
-							setLayout(key)
-							setLayoutName(name)
-							await fetchLayout(key)
-						}}
-					>
-						{name}
-					</DropdownMenuItem>
-				))}
-			</DropdownMenuContent>
-		</DropdownMenu>
+			)}
+		</>
 	)
 }

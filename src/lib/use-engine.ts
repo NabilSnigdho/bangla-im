@@ -128,6 +128,9 @@ export function useEngine() {
 					transformed,
 					suggest(transformed),
 				)
+				if (!this.suggestionsRef.current.includes(this.buffer)) {
+					this.suggestionsRef.current.push(this.buffer)
+				}
 				if (!this.suggestionsRef.current.includes(transformed))
 					this.suggestionsRef.current.unshift(transformed)
 				setSelectedSuggestion(0)
