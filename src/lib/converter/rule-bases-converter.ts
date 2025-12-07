@@ -4,7 +4,7 @@
 
 import { parse } from "@vanillaes/csv"
 import BTree from "sorted-btree"
-import { convert } from "./khipro-converter"
+import { Converter } from "./converter"
 
 export enum Target {
 	Suffix = 0,
@@ -35,12 +35,10 @@ export type Pattern = {
 	rules: Rule[]
 }
 
-export class Converter {
+export class RulesBasedConverter implements Converter {
 	private readonly patterns: BTree<string, Pattern>
-	private readonly khipro: boolean
 
-	constructor(csv: string, khipro = false) {
-		this.khipro = khipro
+	constructor(csv: string) {
 		this.patterns = new BTree(
 			parse(csv)
 				.filter(([match, patternStr]) => !!match && patternStr !== undefined)
@@ -89,7 +87,6 @@ export class Converter {
 	}
 
 	convert(rawInput: string) {
-		if (this.khipro) return convert(rawInput)
 		let prefix = " "
 		let input = rawInput
 		let output = ""

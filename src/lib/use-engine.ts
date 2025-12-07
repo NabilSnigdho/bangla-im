@@ -121,8 +121,10 @@ export function useEngine() {
 
 			if (/[ \n]$/.test(this.buffer)) this.newSession(null)
 			else if (this.start !== null) {
+				const converter = getDefaultStore().get(converterAtom)
 				const transformed =
-					getDefaultStore().get(converterAtom).convert(this.buffer) ||
+					(converter.state === "hasData" &&
+						converter.data.convert(this.buffer)) ||
 					this.buffer
 				this.suggestionsRef.current = sortByPhoneticRelevance(
 					transformed,

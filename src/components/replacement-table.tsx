@@ -9,7 +9,7 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog"
-import { rtAtom } from "@/lib/store"
+import { layoutAtom } from "@/lib/store"
 import { useAtom } from "jotai"
 import { TableProperties } from "lucide-react"
 import { Suspense, lazy } from "react"
@@ -17,7 +17,7 @@ import { Suspense, lazy } from "react"
 const OBKLayout = lazy(() => import("./obk-layout"))
 
 export function ReplacementTable() {
-	const [rt, setRT] = useAtom(rtAtom)
+	const [layout, setLayout] = useAtom(layoutAtom)
 
 	return (
 		<Dialog>
@@ -35,15 +35,18 @@ export function ReplacementTable() {
 				</DialogHeader>
 				<div
 					className="input-sizer stacked overflow-y-auto rounded border border-black p-4"
-					data-value={rt}
+					data-value={layout}
 				>
 					<textarea
 						className="border-none bg-slate-300 outline-none"
 						rows={1}
 						placeholder="match,replacement"
-						value={rt}
+						value={layout.content}
 						onChange={(event) => {
-							setRT(event.currentTarget.value)
+							setLayout((layout) => ({
+								...layout,
+								content: event.currentTarget.value,
+							}))
 						}}
 					/>
 				</div>

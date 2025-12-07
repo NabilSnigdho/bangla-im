@@ -19,6 +19,7 @@ import { useForm } from "react-hook-form"
 import { twc } from "react-twc"
 import * as z from "zod"
 import { Field } from "./ui/field"
+import { RulesBasedConverter } from "@/lib/converter/rule-bases-converter"
 
 const Row = twc.div`flex flex-wrap gap-x-4`
 
@@ -66,9 +67,14 @@ export function OBKLayout() {
 		}
 
 		const converter = getDefaultStore().get(converterAtom)
+		if (
+			converter.state !== "hasData" ||
+			!(converter.data instanceof RulesBasedConverter)
+		)
+			return
 		const element = document.createElement("a")
 		const file = new Blob(
-			[JSON.stringify(converter.getOBKPhoneticLayout(data), null, 2)],
+			[JSON.stringify(converter.data.getOBKPhoneticLayout(data), null, 2)],
 			{ type: "text/plain" },
 		)
 		element.href = URL.createObjectURL(file)
